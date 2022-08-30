@@ -13,19 +13,20 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- *
- * @author familia
- */
+@RestController
+@RequestMapping("/skills")
+@CrossOrigin(origins = "*")
 public class CSkills {
-    
     @Autowired
     ServiceSkills serviceSkills;
     
@@ -49,7 +50,7 @@ public class CSkills {
             return new ResponseEntity(new Mensaje("no existe"), HttpStatus.NOT_FOUND);
         }
         serviceSkills.delete(id);
-        return new ResponseEntity(new Mensaje("skills eliminada"), HttpStatus.OK);
+        return new ResponseEntity(new Mensaje("skill eliminada"), HttpStatus.OK);
     }
     
   @PostMapping("/create")
@@ -57,12 +58,12 @@ public class CSkills {
       if(StringUtils.isBlank(dtoSkills.getNameSkill()))
           return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
       if(serviceSkills.existsByNameSkill(dtoSkills.getNameSkill()))
-          return new ResponseEntity(new Mensaje("Esa experiencia existe"), HttpStatus.BAD_REQUEST);
+          return new ResponseEntity(new Mensaje("Esa skill existe"), HttpStatus.BAD_REQUEST);
       
     Skills skills = new Skills(dtoSkills.getNameSkill(), dtoSkills.getFotoSkill(), dtoSkills.getPorcentaje());
     serviceSkills.save(skills);
     
-    return new ResponseEntity(new Mensaje("Skills agregada"), HttpStatus.OK);
+    return new ResponseEntity(new Mensaje("Skill agregada"), HttpStatus.OK);
   }
   
   @PutMapping("/update/{id}")
@@ -72,7 +73,7 @@ public class CSkills {
           return new ResponseEntity(new Mensaje("El ID no existe"), HttpStatus.BAD_REQUEST);
       //Compara nombre de experiencia
       if(serviceSkills.existsByNameSkill(dtoSkills.getNameSkill()) && serviceSkills.getByNameSkill(dtoSkills.getNameSkill()).get().getId() != id)
-          return new ResponseEntity(new Mensaje("Esa Skills ya existe"), HttpStatus.BAD_REQUEST);
+          return new ResponseEntity(new Mensaje("Esa Skill ya existe"), HttpStatus.BAD_REQUEST);
       //No puede estar vacio
       if(StringUtils.isBlank(dtoSkills.getNameSkill()))
           return new ResponseEntity(new Mensaje("El nombre es obligatorio"), HttpStatus.BAD_REQUEST);
@@ -83,7 +84,7 @@ public class CSkills {
       skills.setPorcentaje((dtoSkills.getPorcentaje()));
   
       serviceSkills.save(skills);
-      return new ResponseEntity(new Mensaje("Skills actualizada"), HttpStatus.OK);
+      return new ResponseEntity(new Mensaje("Skill actualizada"), HttpStatus.OK);
   }
 }
 
